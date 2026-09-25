@@ -898,13 +898,25 @@
       position:relative;margin-top:18px;padding:14px;border-radius:30px;
       background:rgba(255,255,255,.94);border:1px solid rgba(0,0,0,.06);
       box-shadow:0 22px 60px rgba(0,0,0,.10);overflow:hidden;
+      touch-action:pan-y;
+      -webkit-tap-highlight-color:transparent;
     }
-    .intro-slider-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:none}
+    .intro-slider-tabs{
+      display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+      overscroll-behavior-x:contain;
+      touch-action:pan-x;
+      scroll-behavior:smooth;
+    }
     .intro-slider-tabs::-webkit-scrollbar{display:none}
     .intro-tab{
-      flex:0 0 auto;border:1px solid rgba(0,0,0,.06);background:#fff;color:#333;cursor:pointer;
+      flex:0 0 auto;min-height:44px;border:1px solid rgba(0,0,0,.06);background:#fff;color:#333;cursor:pointer;
       padding:10px 13px;border-radius:999px;font-weight:800;font-size:.78rem;transition:.22s ease;
       box-shadow:0 7px 16px rgba(0,0,0,.04);
+      white-space:nowrap;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:transparent;
+      user-select:none;
     }
     .intro-tab.active{background:linear-gradient(135deg,#111,#d71920);color:#fff;border-color:transparent;box-shadow:0 14px 28px rgba(215,25,32,.24)}
     .intro-slider-stage{position:relative;min-height:520px}
@@ -946,12 +958,18 @@
     .intro-slide-content li::marker{color:#d71920}
     .intro-slider-controls{display:flex;align-items:center;gap:10px;margin-top:14px}
     .intro-nav{
-      width:42px;height:42px;border:0;border-radius:50%;background:#111;color:#fff;cursor:pointer;
-      font-size:1.15rem;font-weight:900;box-shadow:0 10px 22px rgba(0,0,0,.10);transition:.22s ease;flex-shrink:0
+      width:44px;height:44px;min-width:44px;border:0;border-radius:50%;background:#111;color:#fff;cursor:pointer;
+      font-size:1.15rem;font-weight:900;box-shadow:0 10px 22px rgba(0,0,0,.10);transition:.22s ease;flex-shrink:0;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:transparent;
     }
     .intro-nav:hover{background:#d71920;transform:translateY(-1px)}
     .intro-progress{flex:1;height:5px;border-radius:999px;background:rgba(0,0,0,.07);overflow:hidden}
-    .intro-progress-bar{height:100%;width:33.333%;border-radius:inherit;background:linear-gradient(90deg,#111,#d71920);transition:width .35s ease}
+    .intro-progress-bar{
+      height:100%;width:33.333%;border-radius:inherit;
+      background:linear-gradient(90deg,#111,#d71920);
+      transition:width .35s ease;
+    }
     .intro-counter{min-width:62px;text-align:center;color:#555d68;font-size:.76rem;font-weight:900;letter-spacing:.06em}
     .intro-swipe-hint{text-align:center;color:#7a8089;font-size:.72rem;font-weight:700;margin-top:8px}
 
@@ -967,10 +985,62 @@
       body{padding-top:76px;padding-bottom:96px}
       .mobile-bottom-nav{display:flex}
       .mouse-spotlight{display:none}
-      .intro-master-slider{padding:12px;border-radius:24px}
-      .intro-slider-stage{min-height:620px}
-      .intro-slide-content h2{font-size:1.75rem}
-      .intro-slide-content p,.intro-slide-content ul{font-size:.92rem}
+
+      .intro-master-slider{
+        padding:12px;
+        border-radius:24px;
+        touch-action:pan-y;
+      }
+      .intro-slider-tabs{
+        gap:7px;
+        padding-bottom:11px;
+        margin-bottom:1px;
+        touch-action:pan-x;
+      }
+      .intro-tab{
+        min-height:44px;
+        padding:10px 12px;
+        font-size:.75rem;
+      }
+      .intro-slider-stage{
+        min-height:600px;
+      }
+      .intro-slide{
+        gap:14px;
+      }
+      .intro-slide-media{
+        border-radius:20px;
+      }
+      .intro-slide-content{
+        padding:1px 2px 4px;
+      }
+      .intro-slide-content h2{
+        font-size:1.72rem;
+        line-height:1.06;
+      }
+      .intro-slide-content p,
+      .intro-slide-content ul{
+        font-size:.91rem;
+        line-height:1.58;
+      }
+      .intro-slide-content li{
+        margin-bottom:7px;
+      }
+      .intro-slider-controls{
+        gap:8px;
+      }
+      .intro-counter{
+        min-width:56px;
+        font-size:.72rem;
+      }
+      .intro-progress{
+        min-width:0;
+      }
+      .intro-swipe-hint{
+        margin-top:9px;
+        padding-bottom:2px;
+      }
+
       .site-nav{top:7px;width:calc(100% - 12px)}
       .site-nav-inner{padding:9px 10px}
       .site-nav-brand img{width:38px;height:38px}
@@ -985,7 +1055,7 @@
     }
 
   </style>
-<!-- V11: fixed intro tabs + Active Team click/auto slider -->
+<!-- V12: intro manual-only + mobile touch hardening; Active Team remains auto -->
 </head>
 <body>
   <div class="mouse-spotlight" id="mouseSpotlight"></div>
@@ -1075,9 +1145,9 @@
 
       <div class="intro-master-slider" id="introMasterSlider">
         <div class="intro-slider-tabs" role="tablist" aria-label="Giới thiệu FOS Techcombank An Giang">
-          <button class="intro-tab active" data-slide="0" role="tab" aria-selected="true">01. Lịch Sử Hình Thành</button>
-          <button class="intro-tab" data-slide="1" role="tab" aria-selected="false">02. Sứ Mệnh</button>
-          <button class="intro-tab" data-slide="2" role="tab" aria-selected="false">03. Nhiệm Vụ</button>
+          <button type="button" class="intro-tab active" data-slide="0" role="tab" aria-selected="true">01. Lịch Sử Hình Thành</button>
+          <button type="button" class="intro-tab" data-slide="1" role="tab" aria-selected="false">02. Sứ Mệnh</button>
+          <button type="button" class="intro-tab" data-slide="2" role="tab" aria-selected="false">03. Nhiệm Vụ</button>
         </div>
 
         <div class="intro-slider-stage">
@@ -1141,12 +1211,12 @@
         </div>
 
         <div class="intro-slider-controls">
-          <button class="intro-nav" id="introPrev" aria-label="Xem mục trước">‹</button>
-          <div class="intro-progress" aria-hidden="true">
-            <div class="intro-progress-bar" id="introProgressBar" style="width:0%"></div>
+          <button type="button" class="intro-nav" id="introPrev" aria-label="Xem mục trước">‹</button>
+          <div class="intro-progress" role="progressbar" aria-label="Tiến trình mục giới thiệu" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
+            <div class="intro-progress-bar" id="introProgressBar" style="width:33.333%"></div>
           </div>
           <div class="intro-counter" id="introCounter">01 / 03</div>
-          <button class="intro-nav" id="introNext" aria-label="Xem mục tiếp">›</button>
+          <button type="button" class="intro-nav" id="introNext" aria-label="Xem mục tiếp">›</button>
         </div>
         <div class="intro-swipe-hint">← Vuốt trái / phải để xem →</div>
       </div>
@@ -1410,8 +1480,10 @@
     renderCards(filteredData); startAutoCards();
 
 
-    // ===== V11 FIX: INTRO SLIDER =====
-    // 3 tab 01/02/03: click + nút trái/phải + swipe + tự chuyển mỗi 3 giây.
+    // ===== V12 FIX: INTRO SLIDER - MANUAL ONLY =====
+    // 01/02/03 chỉ chuyển khi người dùng thao tác:
+    // tab, nút trái/phải hoặc vuốt ngang trên điện thoại.
+    // KHÔNG có timer tự động cho khu vực này.
     const introMasterSlider = document.getElementById('introMasterSlider');
     const introTabs = [...document.querySelectorAll('.intro-tab')];
     const introSlides = [...document.querySelectorAll('.intro-slide')];
@@ -1421,23 +1493,21 @@
     const introCounter = document.getElementById('introCounter');
 
     let introIndex = 0;
-    let introTimer = null;
     let introTouchStartX = 0;
     let introTouchStartY = 0;
+    let introTouchMoved = false;
 
-    function paintIntroProgress(){
+    function updateIntroProgress(){
       if(!introProgressBar) return;
-      introProgressBar.style.transition = 'none';
-      introProgressBar.style.width = '0%';
-      // Force reflow so every slide starts a fresh 3-second progress animation.
-      void introProgressBar.offsetWidth;
-      introProgressBar.style.transition = 'width 3000ms linear';
-      introProgressBar.style.width = '100%';
+      const total = Math.max(introSlides.length, 1);
+      const percent = ((introIndex + 1) / total) * 100;
+      introProgressBar.style.width = `${percent}%`;
     }
 
-    function showIntroSlide(index, restart = true){
+    function showIntroSlide(index, options = {}){
       if(!introSlides.length) return;
 
+      const {focusTab = false} = options;
       introIndex = (index + introSlides.length) % introSlides.length;
 
       introSlides.forEach((slide, i) => {
@@ -1450,73 +1520,101 @@
         const active = i === introIndex;
         tab.classList.toggle('active', active);
         tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        tab.setAttribute('tabindex', active ? '0' : '-1');
       });
 
       if(introCounter){
-        introCounter.textContent = `${String(introIndex + 1).padStart(2,'0')} / ${String(introSlides.length).padStart(2,'0')}`;
+        introCounter.textContent =
+          `${String(introIndex + 1).padStart(2,'0')} / ${String(introSlides.length).padStart(2,'0')}`;
+      }
+
+      updateIntroProgress();
+      const progressEl = document.querySelector('.intro-progress');
+      if(progressEl){
+        progressEl.setAttribute('aria-valuenow', String(introIndex + 1));
       }
 
       const activeTab = introTabs[introIndex];
-      if(activeTab && window.innerWidth < 700){
-        activeTab.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
-      }
-
-      paintIntroProgress();
-
-      if(restart) restartIntroAuto();
-    }
-
-    function stopIntroAuto(){
-      if(introTimer){
-        clearInterval(introTimer);
-        introTimer = null;
+      if(activeTab && (focusTab || window.innerWidth < 700)){
+        activeTab.scrollIntoView({
+          behavior:'smooth',
+          block:'nearest',
+          inline:'center'
+        });
       }
     }
 
-    function startIntroAuto(){
-      stopIntroAuto();
-      introTimer = setInterval(() => {
-        showIntroSlide(introIndex + 1, false);
-      }, 3000);
-    }
-
-    function restartIntroAuto(){
-      stopIntroAuto();
-      startIntroAuto();
-    }
-
+    // Tab click + keyboard support
     introTabs.forEach((tab, i) => {
-      tab.addEventListener('click', () => showIntroSlide(i, true));
+      tab.addEventListener('click', () => {
+        showIntroSlide(i, {focusTab:true});
+      });
+
+      tab.addEventListener('keydown', (event) => {
+        if(event.key === 'ArrowRight'){
+          event.preventDefault();
+          showIntroSlide(i + 1, {focusTab:true});
+          introTabs[introIndex]?.focus();
+        }else if(event.key === 'ArrowLeft'){
+          event.preventDefault();
+          showIntroSlide(i - 1, {focusTab:true});
+          introTabs[introIndex]?.focus();
+        }else if(event.key === 'Home'){
+          event.preventDefault();
+          showIntroSlide(0, {focusTab:true});
+          introTabs[introIndex]?.focus();
+        }else if(event.key === 'End'){
+          event.preventDefault();
+          showIntroSlide(introSlides.length - 1, {focusTab:true});
+          introTabs[introIndex]?.focus();
+        }
+      });
     });
 
-    introPrev?.addEventListener('click', () => showIntroSlide(introIndex - 1, true));
-    introNext?.addEventListener('click', () => showIntroSlide(introIndex + 1, true));
+    introPrev?.addEventListener('click', () => {
+      showIntroSlide(introIndex - 1, {focusTab:true});
+    });
 
-    introMasterSlider?.addEventListener('touchstart', (e) => {
-      const t = e.changedTouches[0];
-      introTouchStartX = t.clientX;
-      introTouchStartY = t.clientY;
+    introNext?.addEventListener('click', () => {
+      showIntroSlide(introIndex + 1, {focusTab:true});
+    });
+
+    // Mobile swipe: ưu tiên vuốt ngang, không khóa cuộn dọc của trang.
+    introMasterSlider?.addEventListener('touchstart', (event) => {
+      const touch = event.changedTouches[0];
+      introTouchStartX = touch.clientX;
+      introTouchStartY = touch.clientY;
+      introTouchMoved = false;
     }, {passive:true});
 
-    introMasterSlider?.addEventListener('touchend', (e) => {
-      const t = e.changedTouches[0];
-      const dx = t.clientX - introTouchStartX;
-      const dy = t.clientY - introTouchStartY;
+    introMasterSlider?.addEventListener('touchmove', (event) => {
+      const touch = event.changedTouches[0];
+      const dx = touch.clientX - introTouchStartX;
+      const dy = touch.clientY - introTouchStartY;
 
-      // Only treat a mostly-horizontal gesture as a slide command.
-      if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.15){
-        if(dx < 0) showIntroSlide(introIndex + 1, true);
-        else showIntroSlide(introIndex - 1, true);
+      if(Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.15){
+        introTouchMoved = true;
       }
     }, {passive:true});
 
-    document.addEventListener('visibilitychange', () => {
-      if(document.hidden) stopIntroAuto();
-      else restartIntroAuto();
-    });
+    introMasterSlider?.addEventListener('touchend', (event) => {
+      const touch = event.changedTouches[0];
+      const dx = touch.clientX - introTouchStartX;
+      const dy = touch.clientY - introTouchStartY;
 
-    showIntroSlide(0, false);
-    startIntroAuto();
+      if(introTouchMoved && Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.15){
+        if(dx < 0){
+          showIntroSlide(introIndex + 1, {focusTab:true});
+        }else{
+          showIntroSlide(introIndex - 1, {focusTab:true});
+        }
+      }
+
+      introTouchMoved = false;
+    }, {passive:true});
+
+    // Khởi tạo slide đầu tiên. Không có setInterval/setTimeout cho intro.
+    showIntroSlide(0);
 
     // ===== V11 FIX: ACTIVE TEAM SLIDER =====
     // 3 thành viên Active Team: click avatar/core + tự chuyển mỗi 3 giây.
